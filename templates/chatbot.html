@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HDFC Chat Bot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/chatbot">Chat Bot</a>
+        <a href="/feedback">Feedback</a>
+    </nav>
+
+    <div class="chat-container">
+        <div id="chat-box"></div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            
+            // Add user message
+            chatBox.innerHTML += `<div class="user-message">${input.value}</div>`;
+            
+            // Send to server
+            fetch('/handle_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `message=${encodeURIComponent(input.value)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatBox.innerHTML += `<div class="bot-message">${data.response}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+            
+            input.value = '';
+        }
+    </script>
+</body>
+</html>

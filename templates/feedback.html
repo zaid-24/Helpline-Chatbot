@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Form</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/chatbot">Chat Bot</a>
+        <a href="/feedback">Feedback</a>
+    </nav>
+
+    <div class="feedback-form">
+        <h2>Customer Feedback</h2>
+        <form onsubmit="submitFeedback(event)">
+            <label>Email:</label>
+            <input type="email" name="email" required>
+            
+            <label>Rating:</label>
+            <select name="rating" required>
+                <option value="5">Excellent</option>
+                <option value="4">Good</option>
+                <option value="3">Average</option>
+                <option value="2">Poor</option>
+                <option value="1">Very Poor</option>
+            </select>
+            
+            <label>Comments:</label>
+            <textarea name="comments" required></textarea>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function submitFeedback(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            fetch('/submit_feedback', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => {
+                if(response.ok) {
+                    alert('Thank you for your feedback!');
+                    event.target.reset();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
